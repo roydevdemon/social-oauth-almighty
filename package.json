@@ -1,6 +1,6 @@
 {
   "name": "nest-oauth-almighty",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Server-side OAuth social authenticator supporting multiple providers with seamless integration for Node.js applications.",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
