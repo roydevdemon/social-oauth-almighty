@@ -11,6 +11,6 @@ coverage/
 .idea/
 .claude/
 instructions/
-providers/
+temporary/
 docs/
 *.tgz
