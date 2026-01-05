@@ -227,6 +227,75 @@ Get list of registered provider names.
 const providers = oauthService.getRegisteredProviders(); // ['google', 'kakao']
 ```
 
+## Important Security & Configuration Notes
+
+### 1. Verify OAuth App Credentials
+
+Ensure your OAuth app credentials are accurate:
+- **Client ID**: Must match exactly with your OAuth provider's app configuration
+- **Client Secret**: Must be the correct secret key from your provider
+- **Redirect URI**: Must match the redirect URI registered in your OAuth provider's app settings
+
+Any mismatch in these credentials will result in authentication failures.
+
+### 2. Use Environment Variables
+
+**Never hardcode credentials in your source code.** Always use environment variables:
+
+```typescript
+// Good
+{
+  name: 'google',
+  credentials: {
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    client_secret: process.env.GOOGLE_CLIENT_SECRET,
+    redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+  },
+}
+
+// Bad - Never do this!
+{
+  name: 'google',
+  credentials: {
+    client_id: 'your-actual-client-id',  // Don't hardcode!
+    client_secret: 'your-actual-secret', // Don't hardcode!
+    redirect_uri: 'http://localhost:3000/callback',
+  },
+}
+```
+
+Add your `.env` file to `.gitignore` to prevent accidental commits:
+
+```gitignore
+.env
+.env.local
+.env.production
+```
+
+### 3. REST API Authentication
+
+This library uses **REST API OAuth authentication** (server-side flow):
+- Client SDK keys (JavaScript SDK keys) will **NOT** work
+- You must use REST API credentials from your OAuth provider
+- Ensure your OAuth app is configured for "Web Application" or "Server-side" authentication, not "Client-side" or "JavaScript" authentication
+
+### 4. Production Deployment
+
+Before deploying to production:
+
+- **Request production approval** from OAuth providers if required:
+  - **Kakao**: Submit app for review and get production approval
+  - **Naver**: Register business application and get approval
+  - **Google**: Verify your app if using sensitive scopes
+  - **GitHub**: Generally no approval needed for public apps
+
+- **Update redirect URIs** to use your production domain
+- **Use HTTPS** for all redirect URIs in production
+- **Implement proper error handling** for OAuth failures
+- **Store tokens securely** (encrypted database, secure session storage)
+- **Implement token refresh** before tokens expire
+- **Set up monitoring** for OAuth authentication failures
+
 ## Configuration Types
 
 ### OAuthModuleOptions
@@ -419,6 +488,19 @@ npm test
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Issues and Support
+
+If you encounter any issues, bugs, or have questions:
+
+- Check existing [Issues](https://github.com/roydevdemon/nest-oauth-almighty/issues) to see if your problem has been reported
+- Open a new [Issue](https://github.com/roydevdemon/nest-oauth-almighty/issues/new) with detailed information:
+  - OAuth provider you're using
+  - Error messages or unexpected behavior
+  - Minimal code example to reproduce the issue
+  - Environment details (Node.js version, NestJS version, etc.)
+
+We'll do our best to respond and help resolve any problems.
 
 ## License
 
