@@ -1,0 +1,31 @@
+{
+  "source": {
+    "include": ["src"],
+    "includePattern": ".+\\.ts$",
+    "excludePattern": "(node_modules/|build/|.spec.ts$)"
+  },
+  "plugins": [
+    "plugins/markdown",
+    "node_modules/jsdoc-region-tag"
+  ],
+  "opts": {
+    "template": "node_modules/jsdoc-fresh",
+    "encoding": "utf8",
+    "destination": "./docs",
+    "recurse": true,
+    "verbose": true,
+    "readme": "README.md"
+  },
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": true,
+    "default": {
+      "outputSourceFiles": true,
+      "includeDate": false
+    }
+  },
+  "markdown": {
+    "hardwrap": false,
+    "idInHeadings": true
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "entryPoints": ["src/index.ts"],
+  "out": "docs",
+  "exclude": ["**/*.spec.ts", "**/node_modules/**"],
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeInternal": false,
+  "readme": "README.md",
+  "plugin": [],
+  "theme": "default",
+  "name": "nest-oauth-almighty",
+  "includeVersion": true,
+  "navigationLinks": {
+    "GitHub": "https://github.com/roydevdemon/social-oauth-almighty"
+  }
+}
