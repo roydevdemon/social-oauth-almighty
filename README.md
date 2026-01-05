@@ -101,12 +101,14 @@ export class AuthController {
 
 ## Supported Providers
 
-| Provider | Status | Implementation |
-|----------|--------|----------------|
-| Google | ✅ Ready | [GoogleProvider](src/providers/google.provider.ts:11) |
-| Kakao | ✅ Ready | [KakaoProvider](src/providers/kakao.provider.ts:11) |
-| Naver | ✅ Ready | [NaverProvider](src/providers/naver.provider.ts:11) |
-| GitHub | ✅ Ready | [GitHubProvider](src/providers/github.provider.ts:11) |
+| Provider | Status | 
+|----------|--------|
+| Google | ✅ Ready | 
+| Facebook | ✅ Ready | 
+| GitHub | ✅ Ready | 
+| X(Twitter) | ✅ Ready | 
+| Kakao | ✅ Ready | 
+| Naver | ✅ Ready | 
 
 All providers support:
 - ✅ Authorization URL generation
