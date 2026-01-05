@@ -12,3 +12,5 @@ coverage/
 .claude/
 instructions/
 providers/
+docs/
+*.tgz

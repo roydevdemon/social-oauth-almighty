@@ -38,6 +38,7 @@ export interface OAuthTokenResponse {
 export interface OAuthCallbackParams {
   code?: string;
   state?: string;
+  code_verifier?: string; // For PKCE (X/Twitter)
   error?: string;
   error_description?: string;
   [key: string]: string | undefined;

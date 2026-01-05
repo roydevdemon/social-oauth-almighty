@@ -1,0 +1,56 @@
+# Source files
+src/
+*.ts
+!*.d.ts
+
+# Test files
+**/*.spec.ts
+**/*.test.ts
+__tests__/
+coverage/
+.nyc_output/
+
+# Development files
+.vscode/
+.idea/
+.claude/
+instructions/
+providers/
+examples/
+
+# Config files
+tsconfig.json
+tsconfig.*.json
+eslint.config.mjs
+prettier.config.*
+vitest.config.*
+jsdoc.json
+typedoc.json
+
+# Scripts
+scripts/
+
+# Documentation (optional - keep if you want docs in npm)
+docs/
+*.md
+!README.md
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+azure-pipelines.yml
+
+# Logs and temp files
+*.log
+*.tsbuildinfo
+.DS_Store
+.env
+.env.*
+node_modules/
+
+# Package files
+*.tgz
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

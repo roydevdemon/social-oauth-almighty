@@ -63,7 +63,11 @@ export abstract class BaseOAuthProvider {
       throw new Error('Missing authorization code in callback');
     }
 
-    return this.exchangeCodeForToken(callbackParams.code, callbackParams.state);
+    return this.exchangeCodeForToken(
+      callbackParams.code,
+      callbackParams.state,
+      callbackParams.code_verifier,
+    );
   }
 
   /**
@@ -72,6 +76,7 @@ export abstract class BaseOAuthProvider {
   protected abstract exchangeCodeForToken(
     code: string,
     state?: string,
+    codeVerifier?: string,
   ): Promise<OAuthTokenResponse>;
 
   /**

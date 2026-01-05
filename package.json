@@ -4,20 +4,39 @@
   "description": "Server-side OAuth social authenticator supporting multiple providers with seamless integration for Node.js applications.",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
-  "repository": "roydevdemon/social-oauth-almighty",
+  "files": [
+    "build",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/roydevdemon/social-oauth-almighty.git"
+  },
+  "bugs": {
+    "url": "https://github.com/roydevdemon/social-oauth-almighty/issues"
+  },
+  "homepage": "https://github.com/roydevdemon/social-oauth-almighty#readme",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  },
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf build",
     "prepare": "npm run build",
+    "prepublishOnly": "npm run clean && npm run build && npm test",
+    "prepack": "npm run build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"**/*.{ts,json,md,yaml,yml}\"",
     "format:check": "prettier --check \"**/*.{ts,json,md,yaml,yml}\"",
-    "test": "vitest",
-    "test:watch": "vitest --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "docs": "typedoc",
     "docs:serve": "typedoc && npx http-server docs -p 8080 -o",
-    "docs:check": "bash scripts/check-docs.sh"
+    "docs:check": "bash scripts/check-docs.sh",
+    "publish:check": "bash scripts/pre-publish-check.sh"
   },
   "keywords": [
     "oauth",
@@ -38,18 +57,27 @@
   "license": "MIT",
   "type": "commonjs",
   "dependencies": {
-    "@nestjs/common": "^11.1.11",
-    "@nestjs/core": "^11.1.11",
-    "axios": "^1.13.2",
-    "base64-js": "^1.5.1",
-    "js-yaml": "^4.1.1",
-    "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.2"
+    "axios": "^1.13.2"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^10.0.0 || ^11.0.0",
+    "@nestjs/core": "^10.0.0 || ^11.0.0",
+    "reflect-metadata": "^0.1.0 || ^0.2.0",
+    "rxjs": "^7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@nestjs/common": {
+      "optional": false
+    },
+    "@nestjs/core": {
+      "optional": false
+    }
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@nestjs/common": "^11.1.11",
+    "@nestjs/core": "^11.1.11",
     "@nestjs/testing": "^11.1.11",
-    "@types/js-yaml": "^4.0.9",
     "@types/node": "^25.0.3",
     "@typescript-eslint/eslint-plugin": "^8.51.0",
     "@typescript-eslint/parser": "^8.51.0",
@@ -57,10 +85,9 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsdoc": "^61.5.0",
     "eslint-plugin-prettier": "^5.5.4",
-    "jsdoc": "^4.0.5",
-    "jsdoc-fresh": "^5.0.2",
-    "jsdoc-region-tag": "^4.0.1",
     "prettier": "^3.7.4",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
     "typedoc": "^0.28.15",
     "typescript": "^5.9.3",
     "vitest": "^4.0.16"
