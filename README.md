@@ -4,7 +4,7 @@ Server-side OAuth social authenticator supporting multiple providers with seamle
 
 ## Features
 
-- 🔐 Multiple OAuth providers support (Google, GitHub, Kakao, Naver)
+- 🔐 Multiple OAuth providers support (Google, GitHub, Facebook, X(Twitter), Kakao, Naver)
 - 🚀 Easy NestJS integration with dynamic module
 - 📦 TypeScript support with full type definitions
 - 🎯 Simple and intuitive API
@@ -12,12 +12,18 @@ Server-side OAuth social authenticator supporting multiple providers with seamle
 - 🏗️ Class-based provider architecture
 - 🔧 Extensible - add new providers by extending BaseOAuthProvider
 - 🧪 Comprehensive test coverage
-- 🎨 Clean code with no runtime YAML dependencies
 
 ## Installation
 
 ```bash
+# npm
 npm install nest-oauth-almighty
+
+# yarn
+yarn add nest-oauth-almighty
+
+# pnpm
+pnpm add nest-oauth-almighty
 ```
 
 ## Quick Start
@@ -30,10 +36,28 @@ Create a `.env` file in your project root:
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 GOOGLE_REDIRECT_URI=http://localhost:3000/auth/google/callback
+GOOGLE_SCOPE=email profile
 
 KAKAO_CLIENT_ID=your_kakao_client_id
 KAKAO_CLIENT_SECRET=your_kakao_client_secret
 KAKAO_REDIRECT_URI=http://localhost:3000/auth/kakao/callback
+
+# Add other providers as needed
+FACEBOOK_CLIENT_ID=your_facebook_client_id
+FACEBOOK_CLIENT_SECRET=your_facebook_client_secret
+FACEBOOK_REDIRECT_URI=http://localhost:3000/auth/facebook/callback
+
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+GITHUB_REDIRECT_URI=http://localhost:3000/auth/github/callback
+
+X_CLIENT_ID=your_x_client_id
+X_CLIENT_SECRET=your_x_client_secret
+X_REDIRECT_URI=http://localhost:3000/auth/x/callback
+
+NAVER_CLIENT_ID=your_naver_client_id
+NAVER_CLIENT_SECRET=your_naver_client_secret
+NAVER_REDIRECT_URI=http://localhost:3000/auth/naver/callback
 ```
 
 ### 2. Import the module
@@ -52,6 +76,43 @@ import { OAuthModule } from 'nest-oauth-almighty';
             client_id: process.env.GOOGLE_CLIENT_ID,
             client_secret: process.env.GOOGLE_CLIENT_SECRET,
             redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+            scope: process.env.GOOGLE_SCOPE || 'email profile',
+            state: 'random-state-string',
+            access_type: 'offline', // 'online' or 'offline'
+            include_granted_scopes: true, // Optional
+            enable_granular_consent: true, // Optional
+            login_hint: 'user@example.com', // Optional
+            prompt: 'consent', // Optional: 'none', 'consent', 'select_account' 
+          },
+        },
+        {
+          name: 'facebook',
+          credentials: {
+            client_id: process.env.FACEBOOK_CLIENT_ID,
+            client_secret: process.env.FACEBOOK_CLIENT_SECRET,
+            redirect_uri: process.env.FACEBOOK_REDIRECT_URI,
+            api_version: process.env.FACEBOOK_API_VERSION || 'v24.0',
+            state: 'state',
+          },
+        },
+        {
+          name: 'github',
+          credentials: {
+            client_id: process.env.GITHUB_CLIENT_ID,
+            client_secret: process.env.GITHUB_CLIENT_SECRET,
+            redirect_uri: process.env.GITHUB_REDIRECT_URI,
+          },
+        },
+        {
+          name: 'x',
+          credentials: {
+            client_id: process.env.X_CLIENT_ID,
+            client_secret: process.env.X_CLIENT_SECRET,
+            redirect_uri: process.env.X_REDIRECT_URI,
+            scope: process.env.X_SCOPE || 'tweet.read users.read',
+            state: 'random-state-string',
+            code_challenge: 'your-code-challenge',
+            code_challenge_method: 'plain', // 'plain' or 'S256' 
           },
         },
         {
@@ -60,6 +121,21 @@ import { OAuthModule } from 'nest-oauth-almighty';
             client_id: process.env.KAKAO_CLIENT_ID,
             client_secret: process.env.KAKAO_CLIENT_SECRET,
             redirect_uri: process.env.KAKAO_REDIRECT_URI,
+            scope: 'profile_nickname profile_image account_email',
+            prompt: 'login', // Optional: 'none', 'login', 'create', 'select_account'
+            login_hint: 'user@example.com', // Optional
+            service_terms: 'service_term_tag', // Optional
+            state: 'random-state-string', // Optional
+            nonce: 'random-nonce-string', // Optional
+          },
+        },
+        {
+          name: 'naver',
+          credentials: {
+            client_id: process.env.NAVER_CLIENT_ID,
+            client_secret: process.env.NAVER_CLIENT_SECRET,
+            redirect_uri: process.env.NAVER_REDIRECT_URI,
+            state: 'random-state-string', // Optional
           },
         },
       ],
@@ -101,22 +177,14 @@ export class AuthController {
 
 ## Supported Providers
 
-| Provider | Status | 
-|----------|--------|
-| Google | ✅ Ready | 
-| Facebook | ✅ Ready | 
-| GitHub | ✅ Ready | 
-| X(Twitter) | ✅ Ready | 
-| Kakao | ✅ Ready | 
-| Naver | ✅ Ready | 
-
-All providers support:
-- ✅ Authorization URL generation
-- ✅ OAuth callback handling
-- ✅ Token exchange
-- ✅ Token refresh
-- ✅ Token revocation
-- ✅ User info retrieval
+| Provider | Status | Auth URL | Token Exchange | Token Refresh | Token Revoke | User Info |
+|----------|--------|----------|----------------|---------------|--------------|-----------|
+| Google | ✅ Ready | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Facebook | ✅ Ready | ✅ | ✅ | ✅ | ✅ | ✅ |
+| GitHub | ✅ Ready | ✅ | ✅ | ✅ | ✅ | ✅ |
+| X (Twitter) | ✅ Ready | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Kakao | ✅ Ready | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Naver | ✅ Ready | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 ## API Reference
 
@@ -221,14 +289,6 @@ Get user information using access token.
 const user = await oauthService.getUserInfo('google', 'access-token');
 ```
 
-#### `getRegisteredProviders(): string[]`
-
-Get list of registered provider names.
-
-```typescript
-const providers = oauthService.getRegisteredProviders(); // ['google', 'kakao']
-```
-
 ## Important Security & Configuration Notes
 
 ### 1. Verify OAuth App Credentials
@@ -242,10 +302,10 @@ Any mismatch in these credentials will result in authentication failures.
 
 ### 2. Use Environment Variables
 
-**Never hardcode credentials in your source code.** Always use environment variables:
+**Never hardcode credentials in your source code.** Always use environment variables.
 
+**Good Practice:**
 ```typescript
-// Good
 {
   name: 'google',
   credentials: {
@@ -254,8 +314,10 @@ Any mismatch in these credentials will result in authentication failures.
     redirect_uri: process.env.GOOGLE_REDIRECT_URI,
   },
 }
+```
 
-// Bad - Never do this!
+**Bad Practice - Never do this!**
+```typescript
 {
   name: 'google',
   credentials: {
@@ -266,11 +328,12 @@ Any mismatch in these credentials will result in authentication failures.
 }
 ```
 
-Add your `.env` file to `.gitignore` to prevent accidental commits:
+**Important:** Add your `.env` file to `.gitignore` to prevent accidental commits:
 
 ```gitignore
 .env
 .env.local
+.env.*.local
 .env.production
 ```
 
@@ -281,211 +344,28 @@ This library uses **REST API OAuth authentication** (server-side flow):
 - You must use REST API credentials from your OAuth provider
 - Ensure your OAuth app is configured for "Web Application" or "Server-side" authentication, not "Client-side" or "JavaScript" authentication
 
-### 4. Production Deployment
+### 4. Production Deployment Checklist
 
-Before deploying to production:
+Before deploying to production, ensure you complete the following steps:
 
-- **Request production approval** from OAuth providers if required:
-  - **Kakao**: Submit app for review and get production approval
-  - **Naver**: Register business application and get approval
-  - **Google**: Verify your app if using sensitive scopes
-  - **GitHub**: Generally no approval needed for public apps
+#### OAuth Provider Approvals
+- **Kakao**: Submit app for review and obtain production approval
+- **Naver**: Register business application and get approval
+- **Google**: Verify your app if using sensitive scopes
+- **Facebook**: Submit app for review and obtain production approval
+- **GitHub**: Generally no approval needed for public apps
+- **X (Twitter)**: Apply for Elevated access if needed
 
-- **Update redirect URIs** to use your production domain
-- **Use HTTPS** for all redirect URIs in production
-- **Implement proper error handling** for OAuth failures
-- **Store tokens securely** (encrypted database, secure session storage)
-- **Implement token refresh** before tokens expire
-- **Set up monitoring** for OAuth authentication failures
-
-## Configuration Types
-
-### OAuthModuleOptions
-
-```typescript
-interface OAuthModuleOptions {
-  providers: OAuthProviderConfig[];
-  isGlobal?: boolean;
-}
-```
-
-### OAuthProviderConfig
-
-```typescript
-interface OAuthProviderConfig {
-  name: string;
-  credentials: ProviderCredentials;
-}
-```
-
-### ProviderCredentials
-
-```typescript
-interface ProviderCredentials {
-  client_id: string;
-  client_secret: string;
-  redirect_uri?: string;
-  api_version?: string;
-  [key: string]: string | undefined;
-}
-```
-
-## Adding New Providers
-
-To add a new OAuth provider, create a provider class extending `BaseOAuthProvider`:
-
-### Step 1: Create Provider Class
-
-Create a new file in `src/providers/your-provider.provider.ts`:
-
-```typescript
-import { BaseOAuthProvider } from '../core/base-provider';
-import {
-  AuthUrlOptions,
-  OAuthTokenResponse,
-  TokenRefreshOptions,
-  TokenRevokeOptions,
-  UserInfoResponse,
-} from '../types/provider.types';
-
-export class YourProvider extends BaseOAuthProvider {
-  get name(): string {
-    return 'your-provider';
-  }
-
-  protected getRequiredCredentials(): string[] {
-    return ['client_id', 'client_secret', 'redirect_uri'];
-  }
-
-  generateAuthUrl(options: AuthUrlOptions = {}): string {
-    const params = {
-      client_id: this.credentials.client_id,
-      redirect_uri: this.credentials.redirect_uri,
-      response_type: 'code',
-      scope: options.scope,
-      state: options.state,
-    };
-
-    return this.buildUrl('https://oauth.provider.com/authorize', params);
-  }
-
-  protected async exchangeCodeForToken(
-    code: string,
-    state?: string,
-  ): Promise<OAuthTokenResponse> {
-    const data = {
-      code,
-      client_id: this.credentials.client_id,
-      client_secret: this.credentials.client_secret,
-      redirect_uri: this.credentials.redirect_uri,
-      grant_type: 'authorization_code',
-    };
-
-    return this.httpClient.post<OAuthTokenResponse>(
-      'https://oauth.provider.com/token',
-      data,
-    );
-  }
-
-  async refreshToken(options: TokenRefreshOptions): Promise<OAuthTokenResponse> {
-    // Implement token refresh
-  }
-
-  async revokeToken(options: TokenRevokeOptions): Promise<void> {
-    // Implement token revocation
-  }
-
-  async getUserInfo(accessToken: string): Promise<UserInfoResponse> {
-    return this.httpClient.get<UserInfoResponse>(
-      'https://api.provider.com/user',
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
-    );
-  }
-}
-```
-
-### Step 2: Register in Provider Registry
-
-Add your provider to `src/providers/index.ts`:
-
-```typescript
-import { YourProvider } from './your-provider.provider';
-
-export const PROVIDER_REGISTRY: Record<string, ProviderConstructor> = {
-  google: GoogleProvider,
-  kakao: KakaoProvider,
-  naver: NaverProvider,
-  github: GitHubProvider,
-  'your-provider': YourProvider, // Add your provider
-};
-
-export { YourProvider } from './your-provider.provider';
-```
-
-That's it! Your provider is now available for use.
-
-## Advanced Usage
-
-### Using with Guards
-
-You can create custom guards to protect routes:
-
-```typescript
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { OAuthService } from 'nest-oauth-almighty';
-
-@Injectable()
-export class OAuthGuard implements CanActivate {
-  constructor(private oauthService: OAuthService) {}
-
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const token = request.headers.authorization?.replace('Bearer ', '');
-
-    if (!token) {
-      return false;
-    }
-
-    try {
-      const user = await this.oauthService.getUserInfo('google', token);
-      request.user = user;
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-}
-```
-
-## Examples
-
-Check the [examples](./examples) directory for more usage examples:
-
-- [basic-usage.ts](./examples/basic-usage.ts) - Basic synchronous configuration
-- [async-usage.ts](./examples/async-usage.ts) - Async configuration with ConfigService
-
-## Development
-
-```bash
-# Install dependencies
-npm install
-
-# Build
-npm run build
-
-# Lint
-npm run lint
-
-# Format
-npm run format
-
-# Test
-npm test
-```
+#### Security & Configuration
+- ✅ **Update redirect URIs** to use your production domain
+- ✅ **Use HTTPS** for all redirect URIs in production (required)
+- ✅ **Implement proper error handling** for OAuth failures
+- ✅ **Store tokens securely** (encrypted database, secure session storage)
+- ✅ **Implement token refresh** before tokens expire
+- ✅ **Set up monitoring** for OAuth authentication failures
+- ✅ **Enable rate limiting** to prevent abuse
+- ✅ **Implement CSRF protection** using the `state` parameter
+- ✅ **Validate redirect URIs** on the server side
 
 ## Contributing
 
