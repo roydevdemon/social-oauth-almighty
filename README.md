@@ -41,7 +41,6 @@ KAKAO_CLIENT_ID=your_kakao_client_id
 KAKAO_CLIENT_SECRET=your_kakao_client_secret
 KAKAO_REDIRECT_URI=http://localhost:3000/auth/kakao/callback
 
-# Add other providers as needed
 FACEBOOK_CLIENT_ID=your_facebook_client_id
 FACEBOOK_CLIENT_SECRET=your_facebook_client_secret
 FACEBOOK_REDIRECT_URI=http://localhost:3000/auth/facebook/callback
