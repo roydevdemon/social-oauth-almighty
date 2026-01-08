@@ -76,13 +76,6 @@ import { OAuthModule } from 'nest-oauth-almighty';
             client_id: process.env.GOOGLE_CLIENT_ID,
             client_secret: process.env.GOOGLE_CLIENT_SECRET,
             redirect_uri: process.env.GOOGLE_REDIRECT_URI,
-            scope: process.env.GOOGLE_SCOPE || 'email profile',
-            state: 'random-state-string',
-            access_type: 'offline', // 'online' or 'offline'
-            include_granted_scopes: true, // Optional
-            enable_granular_consent: true, // Optional
-            login_hint: 'user@example.com', // Optional
-            prompt: 'consent', // Optional: 'none', 'consent', 'select_account' 
           },
         },
         {
@@ -92,7 +85,6 @@ import { OAuthModule } from 'nest-oauth-almighty';
             client_secret: process.env.FACEBOOK_CLIENT_SECRET,
             redirect_uri: process.env.FACEBOOK_REDIRECT_URI,
             api_version: process.env.FACEBOOK_API_VERSION || 'v24.0',
-            state: 'state',
           },
         },
         {
@@ -109,10 +101,6 @@ import { OAuthModule } from 'nest-oauth-almighty';
             client_id: process.env.X_CLIENT_ID,
             client_secret: process.env.X_CLIENT_SECRET,
             redirect_uri: process.env.X_REDIRECT_URI,
-            scope: process.env.X_SCOPE || 'tweet.read users.read',
-            state: 'random-state-string',
-            code_challenge: 'your-code-challenge',
-            code_challenge_method: 'plain', // 'plain' or 'S256' 
           },
         },
         {
@@ -121,12 +109,6 @@ import { OAuthModule } from 'nest-oauth-almighty';
             client_id: process.env.KAKAO_CLIENT_ID,
             client_secret: process.env.KAKAO_CLIENT_SECRET,
             redirect_uri: process.env.KAKAO_REDIRECT_URI,
-            scope: 'profile_nickname profile_image account_email',
-            prompt: 'login', // Optional: 'none', 'login', 'create', 'select_account'
-            login_hint: 'user@example.com', // Optional
-            service_terms: 'service_term_tag', // Optional
-            state: 'random-state-string', // Optional
-            nonce: 'random-nonce-string', // Optional
           },
         },
         {
@@ -135,7 +117,6 @@ import { OAuthModule } from 'nest-oauth-almighty';
             client_id: process.env.NAVER_CLIENT_ID,
             client_secret: process.env.NAVER_CLIENT_SECRET,
             redirect_uri: process.env.NAVER_REDIRECT_URI,
-            state: 'random-state-string', // Optional
           },
         },
       ],
@@ -235,19 +216,52 @@ OAuthModule.forRootAsync({
 
 ### OAuthService
 
-#### `registerProvider(providerName: string, credentials: ProviderCredentials): void`
-
-Manually register a provider at runtime.
-
 #### `generateAuthUrl(providerName: string, options?: AuthUrlOptions): string`
-
 Generate OAuth authorization URL.
 
 ```typescript
-const url = oauthService.generateAuthUrl('google', {
+// Google
+const googleUrl = oauthService.generateAuthUrl('google', {
   scope: 'email profile',
   state: 'random-state',
+  access_type: 'offline', // 'online' or 'offline'
+  include_granted_scopes: true, // Optional
+  enable_granular_consent: true, // Optional
+  login_hint: 'user@example.com', // Optional
+  prompt: 'consent', // Optional: 'none', 'consent', 'select_account' 
 });
+
+// Facebook
+const fbUrl = oauthService.generateAuthUrl('facebook', {
+  state: 'random-state',
+});
+
+// Github
+const githubUrl = oauthService.generateAuthUrl('github', {});
+
+// X(Twitter)
+const xUrl = oauthService.generateAuthUrl('x', {
+  scope: process.env.X_SCOPE || 'tweet.read users.read',
+  state: 'random-state-string',
+  code_challenge: 'your-code-challenge',
+  code_challenge_method: 'plain', // 'plain' or 'S256' 
+});
+
+// Kakao
+const kakaoUrl = oauthService.generateAuthUrl('x', {
+   scope: 'profile_nickname profile_image account_email',
+  prompt: 'login', // Optional: 'none', 'login', 'create', 'select_account'
+  login_hint: 'user@example.com', // Optional
+  service_terms: 'service_term_tag', // Optional
+  state: 'random-state-string', // Optional
+  nonce: 'random-nonce-string', // Optional
+});
+
+// Naver 
+const naverUrl = oauthService.generateAuthUrl('naver', {
+  state: 'random-state-string', // Optional
+});
+
 ```
 
 #### `handleCallback(providerName: string, callbackParams: OAuthCallbackParams): Promise<OAuthTokenResponse>`
@@ -255,7 +269,7 @@ const url = oauthService.generateAuthUrl('google', {
 Handle OAuth callback and exchange authorization code for tokens.
 
 ```typescript
-const tokens = await oauthService.handleCallback('google', {
+const token = await oauthService.handleCallback('google', {
   code: 'authorization-code',
   state: 'state-string',
 });
@@ -375,8 +389,8 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 If you encounter any issues, bugs, or have questions:
 
-- Check existing [Issues](https://github.com/roydevdemon/nest-oauth-almighty/issues) to see if your problem has been reported
-- Open a new [Issue](https://github.com/roydevdemon/nest-oauth-almighty/issues/new) with detailed information:
+- Check existing [Issues](https://github.com/roydevdemon/social-oauth-almighty/issues) to see if your problem has been reported
+- Open a new [Issue](https://github.com/roydevdemon/social-oauth-almighty/issues/new) with detailed information:
   - OAuth provider you're using
   - Error messages or unexpected behavior
   - Minimal code example to reproduce the issue
